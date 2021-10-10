@@ -109,39 +109,6 @@
 
                   <table class="table table-head-fixed text-nowrap" id="mainTable">
 
-                    <tbody>
-                      <tr></tr>
-                      <tr><th class="colRed">Account</th></tr>
-                      <tr></tr>
-                    </tbody>
-  
-                    <tbody>
-                      <tr>
-                        <th>id</th>
-                        <th>Opening Balance</th>
-                        <th>Sales</th>
-                        <th>Purchase</th>
-                        <th>Expenses</th>
-                        <th>Closing Balance</th>
-                      </tr>
-                    </tbody>
-                      
-                    <tbody>
-                        <% report.account.map((row) => { %>
-  
-                          <tr>
-                            <td><%= row.id %></td>
-                            <td><%= row.openingBalance %></td>
-                            <td><%= row.sales %></td>
-                            <td><%= row.purchase %></td>
-                            <td><%= row.expense %></td>
-                            <td><%= row.closingBalance %></td>
-                          </tr>
-  
-                        <% }) %>
-  
-  
-                    </tbody>
 
                     <tbody>
                       <tr></tr>
