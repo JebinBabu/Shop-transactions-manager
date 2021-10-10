@@ -1,0 +1,270 @@
+<%- include('./templates/header.ejs') %>
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          
+            <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">All products and stock</h3>
+    
+                    <div class="card-tools noPrint">
+                      <div class="input-group input-group-sm" style="width: 150px;">
+                        <form action="/searchProduct" method="POST" style="display: inline-flex;">
+                          <input type="text" name="searchVal" class="form-control float-right" placeholder="Search">
+    
+                          <div class="input-group-append">
+                            <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                          </div>
+                        </form>
+                       
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap" id="mainTable" style="text-align: center;">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Product Name</th>
+                          <th>Weight</th>
+                          <th>Buy price</th>
+                          <th>Sell Price</th>
+                          <th>GST( % )</th>
+                          <th>Stock</th>
+                          <th class="noPrint"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <% products.map((el) => { %>
+
+                          <tr>
+                            <td class="<%= el.id %>"><%= el.id %></td>
+                            <td class="<%= el.id %>"><%= el.name %></td>
+                            <td class="<%= el.id %>"><%= el.weight %></td>
+                            <td class="<%= el.id %>"><%= el.buyPrice %></td>
+                            <td class="<%= el.id %>"><%= el.sellPrice %></td>
+                            <td class="<%= el.id %>"><%= el.gst %></td>
+                            <td class="<%= el.id %>" style="color:red;"><%= el.stock %></td>
+                            <td class="myTools noPrint">
+                              <button id="edit<%= el.id %>" type="button" class="editBtn btn btn-primary" data-toggle="modal" data-target="#editModal"><i  id="ghgh<%= el.id %>" class="editBtn fas fa-pencil-alt"></i></button>
+                              <button id="dlt<%= el.id %>" type="button" class="dltBtn btn btn-primary" data-toggle="modal" data-target="#dltModal"><i  id="eee<%= el.id %>" class="dltBtn fas fa-trash"></i></button>
+                            </td>
+                          </tr>
+
+                        <% }) %>
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+            
+          
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+    <!-- edit modal -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+          
+            <div class="col-sm-12" style="margin:auto;">
+  
+              <div class="card card-primary">
+
+                  <!-- /.card-header -->
+                  <!-- form start -->
+                  <form role="form" id="editProductForm">
+                    <input class="modalFields"  type="hidden" id="id">
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label for="exampleInputEmail1">Name</label>
+                        <input  type="text" class="modalFields form-control" id="name" required placeholder="Product Name">
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="exampleInputPassword1">Weight</label>
+                            <input  type="text" class="modalFields form-control" id="weight" required placeholder="Weight">
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="exampleInputPassword1">Buy price</label>
+                            <input  type="number" step="any" class="modalFields form-control" id="buyPrice" required placeholder="Buy price">
+                          
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="exampleInputPassword1">Sell Price</label>
+                            <input  type="number" step="any" class="modalFields form-control" id="sellPrice" required placeholder="Sell Price">
+                          
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="exampleInputPassword1">GST(%)</label>
+                            <input  type="number" step="any" class="modalFields form-control" id="gst" required placeholder="GST">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="exampleInputPassword1">Stock</label>
+                            <input  type="number" class="modalFields form-control" id="stock" required placeholder="Stock">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+    
+                    <div class="card-footer">
+      
+                    </div>
+                  
+                </div>
+            </div>
+            
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- delete modal -->
+  <div class="modal fade" id="dltModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="dltModalTitle">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+          <form action="/dltItem">
+            <button type="submit" id="submitDlt" name="id" value="" class="btn btn-primary">Yes</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    
+
+$('#editProductForm').submit((e) => {
+
+e.preventDefault()
+
+let productName = $('#name').val()
+
+let data = {
+    id:$('#id').val(),
+    name:productName,
+    weight:$('#weight').val(),
+    buyPrice:$('#buyPrice').val(),
+    sellPrice:$('#sellPrice').val(),
+    stock:$('#stock').val(),
+    gst:$('#gst').val()
+}
+
+$.post(
+    '/editItem',
+    data,
+    (data) => {
+
+        if(data == 'success'){
+            $('#editModal').modal('toggle')
+            $('#successAlert').html(`${productName} edited successfully`)
+            $('#successAlert').css('display','')
+
+            $('#name').val('')
+            $('#weight').val('')
+            $('#buyPrice').val('')
+            $('#sellPrice').val('')
+            $('#stock').val('')
+
+            setTimeout(reloader,2000)
+        }
+        else if( data == 'duplicate entry' ) {
+            $('#editModal').modal('toggle')
+            $('#dangerAlert').html(`This product already exists`)
+            $('#dangerAlert').css('display','')
+        }
+    }
+)
+})
+
+$('.editBtn').click((e) => {
+
+let x = e.target.id
+let id = x.slice(4)
+
+let cols = document.getElementsByClassName(`${id}`)
+let modalCols = document.getElementsByClassName(`modalFields`)
+
+for (let i = 0; i < cols.length; i++) {
+    const el = cols[i];
+
+    modalCols[i].value = el.innerHTML
+    
+}
+})
+
+$('.dltBtn').click((e) => {
+
+let x = e.target.id
+let id = x.slice(3)
+
+let cols = document.getElementsByClassName(`${id}`)
+
+let name = cols[1].innerHTML
+
+$('#dltModalTitle').html(`Delete <span class="colRed">${name}</span> Permanently?`)
+$('#submitDlt').val(cols[0].innerHTML)
+})
+
+
+function reloader(){
+
+location.reload()
+}
+  </script>
+
+  
+ <%- include('./templates/footer.ejs') %>

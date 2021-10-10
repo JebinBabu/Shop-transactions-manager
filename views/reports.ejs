@@ -1,0 +1,303 @@
+<%- include('./templates/header.ejs') %>
+
+    <!-- Main content -->
+
+
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row noPrint">
+          
+          <div class="col-md-12">
+
+              <div class="card card-warning">
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <form role="form" method="POST" action="/generateReport">
+
+                    <div class="row">
+
+                      <div class="col-sm-2">
+                        <label for="">Table</label>
+                        <div class="form-group">
+                          <select class="form-control" name="table" id="selectTable">
+                            <option value="daily">Daily Report</option>
+                            <option value="sales">Sales</option>
+                            <option value="purchase">Purchase</option>
+                            <option value="expenses">Expenses</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-sm-2 singleDate">
+                        <label for="">Date</label>
+                        <div class="form-group">
+                          <input type="date" name="date" class="form-control" id="date">
+                        </div>
+                      </div>
+                      <div class="col-sm-2 multiDate hide">
+                        <label for="">From</label>
+                        <div class="form-group">
+                          <input type="date" name="fromDate" class="form-control" id="fromDate">
+                        </div>
+                      </div>
+                      <div class="col-sm-2 multiDate hide">
+                        <label for="">To</label>
+                        <div class="form-group">
+                          <input type="date" name="toDate" class="form-control" id="toDate">
+                        </div>
+                      </div>
+                      
+                      <div  style="margin-top: 30px;" class="col-sm-2">
+                          <button id="nextBtn" type="submit" class="btn btn-primary">Generate</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>  
+              </div>  
+            </div>  
+
+            <!-- Dropdown --> 
+          </div>
+
+
+        <div class="row">
+          
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Report</h3>
+
+                <div class="card-tools noPrint">
+                  
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0" style="height: 59vh;">
+
+                <% if(report.table == 'transactions'){ %>
+
+                <table class="table table-head-fixed text-nowrap" id="mainTable">
+
+                  <thead>
+                    <tr>
+                      <% report.columns.map((col) => { %>
+
+                        <th><%= col.COLUMN_NAME %></th>
+
+                      <% }) %>
+                    </tr>
+                  </thead>
+                    
+                  <tbody>
+                      <% report.rows.map((row) => { %>
+
+                        <tr>
+                          <% report.columns.map((col) => { %>
+
+                            <td><%= row[col.COLUMN_NAME] %></td>
+
+                          <% }) %>
+                        </tr>
+
+                      <% }) %>
+
+
+                  </tbody>
+                </table>
+
+                <% }else if(report.table == 'dailyReport'){ %>
+
+                  <table class="table table-head-fixed text-nowrap" id="mainTable">
+
+                    <tbody>
+                      <tr></tr>
+                      <tr><th class="colRed">Account</th></tr>
+                      <tr></tr>
+                    </tbody>
+  
+                    <tbody>
+                      <tr>
+                        <th>id</th>
+                        <th>Opening Balance</th>
+                        <th>Sales</th>
+                        <th>Purchase</th>
+                        <th>Expenses</th>
+                        <th>Closing Balance</th>
+                      </tr>
+                    </tbody>
+                      
+                    <tbody>
+                        <% report.account.map((row) => { %>
+  
+                          <tr>
+                            <td><%= row.id %></td>
+                            <td><%= row.openingBalance %></td>
+                            <td><%= row.sales %></td>
+                            <td><%= row.purchase %></td>
+                            <td><%= row.expense %></td>
+                            <td><%= row.closingBalance %></td>
+                          </tr>
+  
+                        <% }) %>
+  
+  
+                    </tbody>
+
+                    <tbody>
+                      <tr></tr>
+                      <tr><th class="colRed">Sales</th></tr>
+                      <tr></tr>
+                    </tbody>
+  
+                    <tbody>
+                      <tr>
+                        <th>id</th>
+                        <th>customer</th>
+                        <th>product #</th>
+                        <th>Total Price</th>
+                        <th>Total GST</th>
+                        <th>Total Price Inc.GST</th>
+                      </tr>
+                    </tbody>
+                      
+                    <tbody>
+                        <% report.bills.map((row) => { %>
+  
+                          <tr>
+                            <td><%= row.id %></td>
+                            <td><%= row.customerName %></td>
+                            <td><%= row.productNos %></td>
+                            <td><%= row.totalPrice %></td>
+                            <td><%= row.totalGST %></td>
+                            <td><%= row.totalPriceWithGST %></td>
+                          </tr>
+  
+                        <% }) %>
+  
+  
+                    </tbody>
+
+                    <tbody>
+                      <tr></tr>
+                      <tr><th class="colRed">Purchase</th></tr>
+                      <tr></tr>
+                    </tbody>
+  
+                    <tbody>
+                      <tr>
+                        <th>id</th>
+                        <th>Supplier</th>
+                        <th>Receipt #</th>
+                        <th>Total Items</th>
+                        <th>Total Price</th>
+                      </tr>
+                    </tbody>
+                      
+                    <tbody>
+                        <% report.receipts.map((row) => { %>
+  
+                          <tr>
+                            <td><%= row.id %></td>
+                            <td><%= row.receiptNo %></td>
+                            <td><%= row.supplierName %></td>
+                            <td><%= row.productNos %></td>
+                            <td><%= row.totalPrice %></td>
+                          </tr>
+  
+                        <% }) %>
+  
+  
+                    </tbody>
+
+                    <tbody>
+                      <tr></tr>
+                      <tr><th class="colRed">Expenses</th></tr>
+                      <tr></tr>
+                    </tbody>
+
+                    <tbody>
+                      <tr>
+                        <th>id</th>
+                        <th>Expense</th>
+                        <th>Amount</th>
+                        <th>Party</th>
+                      </tr>
+                    </tbody>
+                      
+                    <tbody>
+                        <% report.expenses.map((row) => { %>
+  
+                          <tr>
+                            <td><%= row.id %></td>
+                            <td><%= row.name %></td>
+                            <td><%= row.amount %></td>
+                            <td><%= row.party %></td>
+                          </tr>
+  
+                        <% }) %>
+  
+  
+                    </tbody>
+                    
+                  
+                  </table>
+                  
+                  <% } %>
+                
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <script>
+
+    $('#selectTable').change((e) => {
+
+      let table = e.target.value
+
+      switch (table) {
+        case 'daily':
+          
+        $('.singleDate').removeClass('hide')
+        $('.multiDate').addClass('hide')
+          break;
+      
+        case 'sales':
+
+        $('.singleDate').addClass('hide')
+        $('.multiDate').removeClass('hide')
+          
+          break;
+
+        case 'purchase':
+
+        $('.singleDate').addClass('hide')
+        $('.multiDate').removeClass('hide')
+          
+        break;
+
+        case 'expenses':
+
+        $('.singleDate').addClass('hide')
+        $('.multiDate').removeClass('hide')
+          
+          break;
+
+        
+      }
+
+    })
+  </script>
+
+  
+ <%- include('./templates/footer.ejs') %>

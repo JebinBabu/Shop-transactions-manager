@@ -1,0 +1,253 @@
+<%- include('./templates/header.ejs') %>
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          
+          <div class="col-md-12">
+
+              <div class="card card-warning">
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <form role="form" id="saleForm" method="POST" action="/updateCurrentPurchase">
+                    <input type="hidden" name="name" id="productName">
+                    <div class="row">
+                      
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <label>Item</label>
+                          <select class="form-control select2bs4" name="id" id="productId" style="width: 100%;">
+                            <option value="0">Select Item</option>
+                            <% products.map((el) => { %>
+              
+                              <option value='<%= el.id %>'><%= el.name %></option>
+              
+                            <% }) %>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-sm-1">
+                        <div class="form-group">
+                          <label>Nos</label>
+                          <input type="number" name="nos" id="nos" minlength="1" value="1" required class="form-control" placeholder="">
+                        </div>
+                      </div>
+                      <div class="col-sm-1">
+                        <div class="form-group">
+                          <label>Weight</label>
+                          <input id="weight" name="weight" type="text" readonly class="form-control" placeholder="">
+                        </div>
+                      </div>
+                      <div class="col-sm-1">
+                        <div class="form-group">
+                          <label>Price/item</label>
+                          <input id="pricePerItem" name="pricePerItem" type="text" readonly class="form-control" placeholder="">
+                        </div>
+                      </div>
+                      <div class="col-sm-1">
+                        <div class="form-group">
+                          <label>Total Price</label>
+                          <input id="totalPrice" name="totalPrice" type="text" readonly class="form-control" placeholder="">
+                        </div>
+                      </div>
+                      <div class="col-sm-2">
+                          <button style="margin-top: 30px;" disabled id="nextBtn" type="submit" class="disabled btn btn-primary">Next Item</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>  
+              </div>  
+            </div>  
+
+            <!-- Dropdown --> 
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-header">
+                  <form action="/submitReceipt" method="POST">
+                  <div class="card-tools" style="display: inline-flex;margin-bottom: -29px;">
+                    <label for="">Supplier Name: &nbsp;</label>
+                    <div class="form-group"  style="display: inline-flex;">
+                        <input type="text" name="supplierName" required class="form-control" placeholder="Supplier Name"/>
+                     </div>
+                     &nbsp;&nbsp;
+                     <label for="">Receipt ID: &nbsp;</label>
+                    <div class="form-group"  style="display: inline-flex;">
+                        <input type="text" name="receiptNo" required class="form-control" placeholder="Receipt ID: "/>
+                     </div>
+                     &nbsp;&nbsp;
+                    <!-- Date -->
+                    <div class="form-group"   style="display: inline-flex;">
+                      <label for="">Date: &nbsp;&nbsp;</label>
+                      <input type="text" id="date" name="date" class="form-control"/>  
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0" style="height: 300px;">
+                  <table class="table table-hover text-nowrap" style="text-align: center;">
+                    <thead>
+                      <tr>
+                        <th>Item ID</th>
+                        <th>Item Name</th>
+                        <th>weight</th>
+                        <th>nos</th>
+                        <th>Price/Item</th>
+                        <th>Total</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <% for(let i = 0 ; i < currentPurchase.length ; i++){ 
+                        
+                        const el = currentPurchase[i]
+                        %> 
+        
+                        <tr>
+                          <td><%= el.id %></td>
+                          <td><%= el.name %></td>
+                          <td><%= el.weight %></td>
+                          <td><%= el.nos %></td>
+                          <td><%= el.pricePerItem %></td>
+                          <td><%= el.totalPrice %></td>
+                          <td><a href="/deletePurchaseItem?id=<%= i %>&&totalPrice=<%= el.totalPrice %>" style="color:white;" class="btn btn-primary"><i class="fas fa-trash"></i></a></td>
+                        </tr>
+                      
+                      <% } %>
+                      
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                  <div class="container">
+                    <div class="row float-right">
+                      <div class="col-sm-12">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                      </div>
+                    </div>
+                    <div class="row  float-right"  style="margin-right: 10px;">
+                      <div class="col-sm-12">
+                          <input type="text" style="text-align: right;" readonly value="<%= sumTotal %> ₹" class="form-control">
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </form>
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+          
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+
+  <!-- /.content-wrapper -->
+
+
+  <script>
+
+$(document).ready(function(){
+
+  //Initialize Select2 Elements
+  $('.select2').select2()
+            
+  //Initialize Select2 Elements
+  $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+  
+  // set date
+  let d = new Date()
+  let month = (d.getMonth() + 1 < 10)? '0' + (d.getMonth() +1) : d.getMonth()+1
+  let date = (d.getDate() < 10)? '0' + d.getDate() : d.getDate()
+  let x = d.getFullYear() + '-' + month + '-' + date
+
+  $('#date').val(x)
+ });
+
+
+
+    $('#productId').change((e) => {
+
+      let name = $('#productId option:selected').text()
+
+    $('#productName').val(name)
+
+      loadPrice()
+    })
+    
+    $('#nos').change(()=>{
+
+      loadPrice()
+    })
+
+    $('#rate').change(() => {
+
+      loadPrice()
+    })
+
+    function loadPrice(){
+      
+      let productId = $('#productId').val()
+      let nos = $('#nos').val()
+      let rate = $('#rate').val()
+
+      if((productId != 0) && (nos > 0)){
+
+        $('#dangerAlert').css('display','none')
+        $('#nextBtn').removeClass('disabled')
+        document.getElementById('nextBtn').disabled = ''
+        
+        $.post(
+          '/purchaseItemPrice',
+          {
+            'productId':productId,
+            'nos':nos
+          },
+          (data) => {
+
+            if(data){
+              
+              $('#pricePerItem').val(data[0]['buyPrice'])
+
+              let total = data[0]['buyPrice'] * nos
+
+              $('#totalPrice').val(total)
+
+              $('#weight').val(data[0].weight)
+            }
+          }
+        )
+      }
+      else if(nos <= 0 ){
+        $('#dangerAlert').html(`Number of products cannot be less than 1`)
+        $('#dangerAlert').css('display','')
+
+        $('#nextBtn').addClass('disabled')
+        $('#nextBtn').attr('disabled','disabled')
+      }
+      else if(productId == 0 ){
+        $('#dangerAlert').html(`Select a product`)
+        $('#dangerAlert').css('display','')
+
+        $('#nextBtn').addClass('disabled')
+        $('#nextBtn').attr('disabled','disabled')
+      }
+    }
+
+  </script>
+
+  
+
+ <%- include('./templates/footer.ejs') %>
+
+    

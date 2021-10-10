@@ -1,0 +1,155 @@
+<%- include('./templates/header.ejs') %>
+
+    <!-- Main content -->
+
+
+    <div class="content">
+      <div class="container-fluid">
+
+        <div class="row">
+          
+          <div class="col-md-12">
+
+              <div class="card card-warning">
+                <!-- /.card-header -->
+                <div class="card-body">
+
+                    <div class='row'>
+
+                      <div class="col-sm-12" style="text-align: center;">
+                        <button class="btn btn-primary"  data-toggle="modal" data-target="#closeAccountModal"><h5>Update?</h5></button>
+                      </div>
+
+                    </div>
+
+                </div>  
+              </div>  
+            </div>  
+          </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Account Details</h3>
+
+                <div class="card-tools">
+                  <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="date" id="selectDate" class="form-control float-right">
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0" style="height: 59vh;">
+                <table class="table table-head-fixed text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Opening</th>
+                      <th>Sale</th>
+                      <th>Purchase</th>
+                      <th>Expense</th>
+                      <th>Closing</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+          
+
+                    <% data.map((el) => { %> 
+                      
+                      <tr>
+                        <td><%= el.date %></td>
+                        <td><%= el.openingBalance %></td>
+                        <td><%= el.sales %></td>
+                        <td><%= el.purchase %></td>
+                        <td><%= el.expense %></td>
+                        <td><%= el.closingBalance %></td>
+                        <td></td>
+                      </tr>
+
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+<!-- close account Modal -->
+  <div class="modal fade" id="closeAccountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Select Date to be updated?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="">Date:</label>
+            <input class="form-control" type="text" name="date" id="date">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          
+          <button type="button" class="btn btn-primary" id="submitAccountBtn">Proceed</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    $('document').ready(() => {
+
+      let x = giveMeDate()
+
+      $('#date').val(x)
+    })
+
+    $('#selectDate').change((e) => {
+
+      let date = e.target.value
+
+     window.location = '/account?date=' + date
+    })
+
+    $('#submitAccountBtn').click(() => {
+
+      $.post(
+        '/closeAccount',
+        {
+          'date': $('#date').val()
+        },
+        (data) => {
+
+          if(data == 'success'){
+            location.reload()
+            $('#closeAccountModal').modal('toggle')
+          }
+          else{
+
+            $('#dangerAlert').css('display','')
+            $('#dangerAlert').html('Account for the date already exist')
+            $('#closeAccountModal').modal('toggle')
+          }
+        }
+      )
+    })
+  </script>
+
+  
+ <%- include('./templates/footer.ejs') %>

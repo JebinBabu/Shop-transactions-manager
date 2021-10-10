@@ -1,0 +1,126 @@
+<%- include('./templates/header.ejs') %>
+
+    <!-- Main content -->
+
+
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          
+          <div class="col-md-6" style="margin:auto;">
+
+            <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Add New Product</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form role="form" id="addProductForm">
+                  <div class="card-body">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Name</label>
+                      <input type="text" class="form-control" id="name" required placeholder="Product Name">
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="exampleInputPassword1">Weight</label>
+                          <input type="text" class="form-control" id="weight" required placeholder="Weight">
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="exampleInputPassword1">GST</label>
+                          <input type="number" step="any" class="form-control" id="gst" value="0" required placeholder="Weight">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="exampleInputPassword1">Buy price</label>
+                          <input type="number" step="any" class="form-control" id="buyPrice" required placeholder="Buy price">
+                        
+                        </div>
+                      </div>
+                      
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="exampleInputPassword1">Sell Price</label>
+                          <input type="number" step="any" class="form-control" id="sellPrice" required placeholder="Sell Price">
+                        
+                        </div>
+                    </div>
+                    </div>
+                    <div class="row">
+                      
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label for="exampleInputPassword1">Stock</label>
+                          <input type="number" class="form-control" id="stock" required placeholder="Stock">
+                        </div>
+                        
+                      </div>
+                    
+                    </div>
+                  <!-- /.card-body -->
+  
+                  <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                  </div>
+                </form>
+              </div>
+          </div>
+          
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <script>
+    
+$('#addProductForm').submit((e) => {
+
+e.preventDefault()
+
+let productName = $('#name').val()
+
+let data = {
+    name:productName,
+    weight:$('#weight').val(),
+    buyPrice:$('#buyPrice').val(),
+    sellPrice:$('#sellPrice').val(),
+    stock:$('#stock').val(),
+    gst:$('#gst').val()
+}
+
+$.post(
+    '/addItem',
+    data,
+    (data) => {
+
+        if(data == 'success'){
+            $('#successAlert').html(`${productName} added to Products`)
+            $('#successAlert').css('display','')
+
+            $('#name').val('')
+            $('#weight').val('')
+            $('#buyPrice').val('')
+            $('#sellPrice').val('')
+            $('#stock').val('')
+            $('#gst').val('')
+        }
+        else if( data == 'duplicate entry' ) {
+            $('#dangerAlert').html(`This product already exists`)
+            $('#dangerAlert').css('display','')
+        }
+    }
+)
+})
+  </script>
+
+  
+ <%- include('./templates/footer.ejs') %>

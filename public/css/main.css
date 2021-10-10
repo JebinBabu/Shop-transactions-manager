@@ -1,0 +1,18 @@
+.colRed{
+    color:red;
+}
+
+#saleForm label{
+    font-size: 14px;
+}
+
+.myTools .btn{
+
+    background: none;
+    color:rgb(3, 0, 202);
+    border:none;
+}
+
+.hide{
+    display: none;
+}

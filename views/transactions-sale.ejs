@@ -1,0 +1,338 @@
+<%- include('./templates/header.ejs') %>
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row noPrint">
+          
+          <div class="col-md-12">
+
+              <div class="card card-warning">
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <form role="form" id="saleForm" method="POST" action="/updateCurrentSale">
+
+
+                    <input type="hidden" name="name" id="productName">
+                    <input type="hidden" name="totalGST" id="totalGST">
+
+                    <div class="row">
+                      
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <label>Item</label>
+                          <select class="form-control select2bs4" name="id" id="productId" style="width: 100%;">
+                            <option value="0">Select Item</option>
+                            <% products.map((el) => { %>
+              
+                              <option value='<%= el.id %>'><%= el.name %></option>
+              
+                            <% }) %>
+                          </select>
+                        </div>
+                      </div>
+                      <div style="width: 70px;">
+                        <div class="form-group">
+                          <label>Nos</label>
+                          <input type="number" name="nos" id="nos" minlength="1" value="1" required class="form-control" placeholder="">
+                        </div>
+                      </div>
+                      <div class="col-sm-1">
+                        <div class="form-group">
+                          <label>Weight</label>
+                          <input id="weight" name="weight" type="text" readonly class="form-control" placeholder="">
+                        </div>
+                      </div>
+                      <div class="col-sm-1">
+                        <div class="form-group">
+                          <label>Price/item</label>
+                          <input id="pricePerItem" name="pricePerItem" type="text" readonly class="form-control" placeholder="">
+                        </div>
+                      </div>
+                      <div class="col-sm-1">
+                        <div class="form-group">
+                          <label>Discount</label>
+                          <input id="discount" name="discount" value="0" type="number" class="form-control" placeholder="">
+                        </div>
+                      </div>
+                      <div class="col-sm-1">
+                        <div class="form-group">
+                          <label>Tot w/o GST</label>
+                          <input id="totalPrice" name="totalPrice" type="text" readonly class="form-control" placeholder="">
+                        </div>
+                      </div>
+                      <div class="col-sm-1">
+                        <div class="form-group">
+                          <label>GST( % )</label>
+                          <input id="gst" name="gst" type="text" readonly class="form-control" placeholder="">
+                        </div>
+                      </div>
+                      
+                      <div class="col-sm-1">
+                        <div class="form-group">
+                          <label>Tot Inc GST</label>
+                          <input id="totalPriceWithGST" name="totalPriceWithGST" type="text" readonly class="form-control" placeholder="">
+                        </div>
+                      </div>
+                      <div class="col-sm-2">
+                          <button style="margin-top: 30px;" disabled id="nextBtn" type="submit" class="disabled btn btn-primary">Next Item</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>  
+              </div>  
+            </div>  
+
+            <!-- Dropdown --> 
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-header">
+                  <form action="/submitBill" method="POST">
+                  <div class="card-tools" id="salesHead" style="display: inline-flex;margin-bottom: -29px;">
+                    <label for="">Customer Name: &nbsp;</label>
+                    <div class="form-group"  style="display: inline-flex;">
+                        <input type="text" name="customerName" required class="form-control" placeholder="Customer Name"/>
+                     </div>
+                     &nbsp;&nbsp;
+                    <!-- Date -->
+                    <div class="form-group"   style="display: inline-flex;">
+                      <label for="">Date: &nbsp;&nbsp;</label>
+                      <input type="text" id="date" name="date" class="form-control"/>  
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0" style="height: 300px;">
+                  <table class="table table-hover text-nowrap" style="text-align: center;">
+                    <thead>
+                      <tr>
+                        <th>Item ID</th>
+                        <th>Item Name</th>
+                        <th>weight</th>
+                        <th>nos</th>
+                        <th>Price/Item</th>
+                        <th>Discount</th>
+                        <th>Total w/o GST</th>
+                        <th>GST(%)</th>
+                        <th>Total Inc.GST</th>
+                        <th  class="noPrint"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <% for(let i = 0 ; i < currentSale.length ; i++){ 
+                        
+                        const el = currentSale[i]
+                        %> 
+        
+                        <tr>
+                          <td><%= el.id %></td>
+                          <td><%= el.name %></td>
+                          <td><%= el.weight %></td>
+                          <td><%= el.nos %></td>
+                          <td><%= el.pricePerItem %></td>
+                          <td><%= el.discount %></td>
+                          <td><%= el.totalPrice %></td>
+                          <td><%= el.gst %></td>
+                          <td><%= el.totalPriceWithGST %></td>
+                          <td class="noPrint"><a href="/deleteSaleItem?id=<%= i %>&&totalPriceWithGST=<%= el.totalPriceWithGST%>&&totalPrice=<%= el.totalPrice %>" style="color:white;" class="btn btn-primary">delete</a></td>
+                        </tr>
+                      
+                      <% } %>
+                      
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                  <div class="container">
+                    <div class="row float-right noPrint">
+                      <div class="col-sm-12">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                      </div>
+                    </div>
+                    <div class="row  float-right"  style="margin-right: 10px;">
+                      <div class="col-sm-12">
+                          <input type="text" style="text-align: right;" readonly value="<%= sumTotal %> ₹" class="form-control">
+                      </div>
+                    </div>
+                    <div class="row  float-right"  style="margin-right: 10px;">
+                      <label for="">Total payable amount:</label>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+          
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+
+  <!-- /.content-wrapper -->
+
+
+  <script>
+
+$(document).ready(function(){
+
+  //Initialize Select2 Elements
+  $('.select2').select2()
+            
+  //Initialize Select2 Elements
+  $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+
+    let x = giveMeDate()
+
+    $('#date').val(x)
+ });
+
+
+
+    $('#productId').change((e) => {
+
+      let name = $('#productId option:selected').text()
+
+      $('#productName').val(name)
+
+      $.get(
+        '/remainingStock',
+        {
+          id:$('#productId').val()
+        },
+        (data) => {
+
+          if(data.stock < $('#nos').val()){
+
+            $('#dangerAlert').html(`Low stock`)
+            $('#dangerAlert').css('display','')
+          }
+          else{
+            $('#dangerAlert').css('display','none')
+            loadPrice()
+          }
+
+        }
+
+      )
+    })
+    
+    $('#nos').change(()=>{
+
+      $.get(
+        '/remainingStock',
+        {
+          id:$('#productId').val()
+        },
+        (data) => {
+
+          if(data.stock < $('#nos').val()){
+
+            $('#dangerAlert').html(`Low stock`)
+            $('#dangerAlert').css('display','')
+            $('#nextBtn').addClass('disabled')
+            document.getElementById('nextBtn').disabled = 'disabled'  
+          }
+          else{
+            $('#dangerAlert').css('display','none')
+            loadPrice()
+            $('#nextBtn').removeClass('disabled')
+            document.getElementById('nextBtn').disabled = ''
+          }
+
+        }
+
+      )
+
+      
+    })
+
+    $('#rate').change(() => {
+
+      loadPrice()
+    })
+
+    $('#discount').change(() => {
+
+      loadPrice()
+    })
+
+
+
+
+    function loadPrice(){
+      
+      let productId = $('#productId').val()
+      let nos = $('#nos').val()
+      let discount = $('#discount').val()
+
+      if((productId != 0) && (nos > 0)){
+
+        $('#dangerAlert').css('display','none')
+        $('#nextBtn').removeClass('disabled')
+        document.getElementById('nextBtn').disabled = ''
+        
+        $.post(
+          '/saleItemPrice',
+          {
+            'productId':productId
+          },
+          (data) => {
+
+            if(data){
+              
+              $('#pricePerItem').val(data[0]['sellPrice'])
+
+              $('#weight').val(data[0].weight)
+
+              $('#gst').val(data[0].gst)
+
+              let total = (data[0]['sellPrice'] - discount) * nos
+
+              $('#totalPrice').val(total)
+
+              let totalWithGST = total*(data[0].gst/100) + total
+
+              totalWithGST = totalWithGST.toFixed(1)
+
+              $('#totalPriceWithGST').val(totalWithGST)
+
+              let totalGSTAmount = Number(totalWithGST) - total
+              $('#totalGST').val(totalGSTAmount)
+
+            }
+          }
+        )
+      }
+      else if(nos <= 0 ){
+        $('#dangerAlert').html(`Number of products cannot be less than 1`)
+        $('#dangerAlert').css('display','')
+
+        $('#nextBtn').addClass('disabled')
+        $('#nextBtn').attr('disabled','disabled')
+      }
+      else if(productId == 0 ){
+        $('#dangerAlert').html(`Select a product`)
+        $('#dangerAlert').css('display','')
+
+        $('#nextBtn').addClass('disabled')
+        $('#nextBtn').attr('disabled','disabled')
+      }
+    }
+
+  </script>
+
+  
+
+ <%- include('./templates/footer.ejs') %>
+
+    
