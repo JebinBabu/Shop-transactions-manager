@@ -12,7 +12,7 @@
               <div class="card card-warning">
                 <!-- /.card-header -->
                 <div class="card-body">
-                  <form role="form" method="POST" action="/generateReport">
+                  <form role="form" id="generateReportForm" method="POST" action="/generateReport">
 
                     <div class="row">
 
@@ -227,6 +227,27 @@
   <!-- /.content-wrapper -->
 
   <script>
+
+    $('#generateReportForm').submit((e) => {
+
+      let dates = $(':input[type=date]')
+
+      let table = $('#selectTable').val()
+
+      if(table == 'daily' && dates[0].value == ''){
+
+        setAlert('danger','Select a valid date')
+
+        e.preventDefault()
+      }
+      else if(table != 'daily' && (dates[1].value == '' || dates[2].value == '')){
+
+        setAlert('danger','Select a valid date range')
+
+        e.preventDefault()
+      }
+
+    })
 
     $('#selectTable').change((e) => {
 

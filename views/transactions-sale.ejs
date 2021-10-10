@@ -269,13 +269,14 @@ $(document).ready(function(){
 
 
 
+
     function loadPrice(){
       
       let productId = $('#productId').val()
       let nos = $('#nos').val()
       let discount = $('#discount').val()
 
-      if((productId != 0) && (nos > 0)){
+      if((productId != 0) && (nos > 0) && (discount >= 0)){
 
         $('#dangerAlert').css('display','none')
         $('#nextBtn').removeClass('disabled')
@@ -314,15 +315,22 @@ $(document).ready(function(){
         )
       }
       else if(nos <= 0 ){
-        $('#dangerAlert').html(`Number of products cannot be less than 1`)
-        $('#dangerAlert').css('display','')
+        
+        setAlert('danger',`Number of products cannot be less than 1`)
 
         $('#nextBtn').addClass('disabled')
         $('#nextBtn').attr('disabled','disabled')
       }
       else if(productId == 0 ){
-        $('#dangerAlert').html(`Select a product`)
-        $('#dangerAlert').css('display','')
+        
+        setAlert('danger',`Select a product`)
+
+        $('#nextBtn').addClass('disabled')
+        $('#nextBtn').attr('disabled','disabled')
+      }
+      else if(discount < 0 ){
+        
+        setAlert('danger',`Discount cannot be less than 0`)
 
         $('#nextBtn').addClass('disabled')
         $('#nextBtn').attr('disabled','disabled')

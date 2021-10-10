@@ -24,3 +24,10 @@ function setFooterDate(){
     $('#footerDate').html(x)
 }
 setFooterDate()
+
+function setAlert(type,message){
+
+  $('#' + type + 'Alert').css('display','')
+  $('#' + type + 'Alert').html(message)
+}
+
