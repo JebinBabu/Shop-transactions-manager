@@ -52,7 +52,7 @@
                             <td class="<%= el.id %>" style="color:red;"><%= el.stock %></td>
                             <td class="myTools noPrint">
                               <button id="edit<%= el.id %>" type="button" class="editBtn btn btn-primary" data-toggle="modal" data-target="#editModal"><i  id="ghgh<%= el.id %>" class="editBtn fas fa-pencil-alt"></i></button>
-                              <button id="dlt<%= el.id %>" type="button" class="dltBtn btn btn-primary" data-toggle="modal" data-target="#dltModal"><i  id="eee<%= el.id %>" class="dltBtn fas fa-trash"></i></button>
+                              <button onclick="deletePdt('<%= el.id %>')" type="button" class="dltBtn btn btn-primary" data-toggle="modal" data-target="#dltModal"><i class="dltBtn fas fa-trash"></i></button>
                             </td>
                           </tr>
 
@@ -246,10 +246,8 @@ for (let i = 0; i < cols.length; i++) {
 }
 })
 
-$('.dltBtn').click((e) => {
+const deletePdt = (id) => {
 
-let x = e.target.id
-let id = x.slice(3)
 
 let cols = document.getElementsByClassName(`${id}`)
 
@@ -257,7 +255,7 @@ let name = cols[1].innerHTML
 
 $('#dltModalTitle').html(`Delete <span class="colRed">${name}</span> Permanently?`)
 $('#submitDlt').val(cols[0].innerHTML)
-})
+}
 
 
 function reloader(){
